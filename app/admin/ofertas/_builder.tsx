@@ -12,6 +12,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Trash } from 'lucide-react'
 import { ImageInput } from '@/components/ui/ImageInput'
+import { AIRLINES } from '@/lib/airlines'
 
 export type Hotel = {
   id: string
@@ -634,8 +635,13 @@ export function OfertaBuilder({ editingId, initialForm, initialHoteles, initialI
                   <input className={inputCls} placeholder="Ej: 2h 10m" value={v.duracion} onChange={e => setV({ ...v, duracion: e.target.value })} />
                 </div>
                 <div>
-                  <label className={labelCls}>Aerolínea (código)</label>
-                  <input className={inputCls} placeholder="Ej: LA" value={v.aerolinea} onChange={e => setV({ ...v, aerolinea: e.target.value })} />
+                  <label className={labelCls}>Aerolínea</label>
+                  <select className={inputCls} value={v.aerolinea} onChange={e => setV({ ...v, aerolinea: e.target.value })}>
+                    <option value="">Seleccionar</option>
+                    {AIRLINES.map(a => (
+                      <option key={a.code} value={a.code}>{a.name}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className={labelCls}>Equipaje</label>
