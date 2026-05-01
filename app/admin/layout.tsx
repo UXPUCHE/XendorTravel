@@ -37,8 +37,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 bg-[#072E40] text-white flex flex-col justify-between shrink-0">
-        <div>
+      <aside className="w-64 bg-[#072E40] text-white flex flex-col shrink-0 h-screen sticky top-0">
+        <div className="flex-1 overflow-y-auto">
           <div className="px-6 py-6 text-2xl font-bold tracking-tight">Xendor</div>
           <div className="border-t border-white/10 mt-2 mb-4" />
           <nav className="px-3 space-y-1">
@@ -58,8 +58,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* BOTTOM */}
-        <div className="px-3 pb-4">
+        {/* BOTTOM — siempre visible */}
+        <div className="px-3 pb-4 shrink-0">
           <div className="border-t border-white/10 mb-3" />
 
           {/* Configuración */}

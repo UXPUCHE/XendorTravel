@@ -7,11 +7,10 @@ import { Camera } from 'lucide-react'
 export default function ConfiguracionPage() {
   const [email, setEmail] = useState('')
   const [nombre, setNombre] = useState('')
-  const [waNumber, setWaNumber] = useState('')
+
   const [avatarUrl, setAvatarUrl] = useState('')
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [savingPerfil, setSavingPerfil] = useState(false)
-  const [savingWa, setSavingWa] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -20,7 +19,6 @@ export default function ConfiguracionPage() {
       const meta = data.user?.user_metadata || {}
       setEmail(data.user?.email || '')
       setNombre(meta.name || '')
-      setWaNumber(meta.wa_number || '')
       setAvatarUrl(meta.avatar_url || '')
     })
   }, [])
@@ -49,16 +47,6 @@ export default function ConfiguracionPage() {
     setSavingPerfil(false)
     if (error) showToast('Error al guardar ❌')
     else showToast('Perfil actualizado ✓')
-  }
-
-  const handleSaveWa = async () => {
-    setSavingWa(true)
-    const { error } = await supabase.auth.updateUser({
-      data: { wa_number: waNumber }
-    })
-    setSavingWa(false)
-    if (error) showToast('Error al guardar ❌')
-    else showToast('WhatsApp guardado ✓')
   }
 
   const handleChangePassword = async () => {
@@ -150,30 +138,6 @@ export default function ConfiguracionPage() {
           className="border border-[#072E40] text-[#072E40] hover:bg-[#072E40] hover:text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition w-fit"
         >
           Enviar email de cambio de contraseña
-        </button>
-      </div>
-
-      {/* WHATSAPP */}
-      <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-5">
-        <div>
-          <h2 className="font-semibold text-[#072E40]">WhatsApp de consultas</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Número al que llegan las consultas desde las landings. Con código de país, sin el +.
-          </p>
-        </div>
-
-        <div>
-          <label className={labelCls}>Número</label>
-          <input
-            className={inputCls}
-            placeholder="5493516678823"
-            value={waNumber}
-            onChange={e => setWaNumber(e.target.value)}
-          />
-        </div>
-
-        <button onClick={handleSaveWa} disabled={savingWa} className={saveBtnCls}>
-          {savingWa ? 'Guardando...' : 'Guardar'}
         </button>
       </div>
 
