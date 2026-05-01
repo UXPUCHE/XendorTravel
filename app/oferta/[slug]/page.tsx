@@ -34,6 +34,9 @@ type Hotel = {
   badge?: string
   imagen?: string
   principal?: boolean
+  estrellas?: number
+  regimen?: string
+  noches?: number
 }
 
 type Vuelo = {
