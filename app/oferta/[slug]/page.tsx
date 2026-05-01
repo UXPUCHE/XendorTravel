@@ -427,106 +427,93 @@ function DetalleVuelo({ oferta, vuelos }: { oferta: Oferta; vuelos: Vuelo[] }) {
 
 function HotelPrincipal({ hotel, oferta, waUrl }: { hotel: Hotel; oferta: Oferta; waUrl: string }) {
   const incluye = oferta.incluye ?? []
-  const isAllInclusive =
-    oferta.base?.toLowerCase().includes('all inclusive') ||
-    incluye.some(i => i.toLowerCase().includes('all inclusive'))
+  const estrellas = hotel.estrellas ?? 4
 
   return (
     <section className="bg-white border-b border-gray-100">
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-[#072E40] mb-5">Hotel incluido en el paquete</h2>
 
-        <div className="flex flex-col md:flex-row md:h-80 rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-          {/* Image */}
-          <div className="md:w-1/2 h-32 md:h-full min-h-[120px] shrink-0 relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:h-80 rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+
+          {/* IMAGE */}
+          <div className="md:w-1/2 h-48 md:h-full shrink-0 relative overflow-hidden">
             <img
               src={hotel.imagen || PLACEHOLDER}
               alt={hotel.nombre}
-              className="w-full h-full object-cover object-center md:object-[center_30%] hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent pointer-events-none" />
-            {(hotel.badge || true) && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+            {hotel.badge && (
               <span className="absolute top-3 left-3 text-xs font-bold bg-[#11BCB3] text-white px-3 py-1 rounded-full shadow">
-                RECOMENDADO
+                {hotel.badge.toUpperCase()}
               </span>
             )}
           </div>
 
-          {/* Info */}
-          <div className="flex-1 p-4 md:p-4 flex flex-col justify-between">
-            <div>
-              {/* Name + price */}
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <div>
-                  <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-gray-900">{hotel.nombre}</h3>
-                  <p className="flex items-center gap-1.5 text-sm text-gray-500 mt-0.5">
-                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24" className="text-gray-400">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/>
-                    </svg>
-                    {oferta.destino}
-                  </p>
-                </div>
-                <div className="text-right flex flex-col items-end shrink-0">
-                  <p className="text-[12px] text-gray-400 font-medium leading-none mb-0.5">
-                    Desde
-                  </p>
-                  <div className="flex items-end gap-1 leading-none -mt-[1px]">
-                    <span className="text-lg font-semibold text-[#072E40]">USD</span>
-                    <span className="text-2xl md:text-4xl font-extrabold tracking-tight text-[#072E40]">
-                      {hotel.precio.toLocaleString('es-AR')}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-0 leading-none">
-                    Por persona en base doble
-                  </p>
-                </div>
-              </div>
+          {/* INFO */}
+          <div className="flex-1 p-6 flex flex-col justify-between">
 
-              {/* Amenities chips */}
-              {incluye.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-6">
-                  {incluye.slice(0, 3).map((item, i) => (
-                    <span key={i} className="flex items-center gap-1.5 text-xs font-semibold text-gray-800 bg-gray-100/80 border border-gray-200 px-3 py-1.5 rounded-full">
-                      <span className="text-[#11BCB3] shrink-0"><IconCheck /></span>
-                      {item}
-                    </span>
+            {/* TOP: nombre + precio */}
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-[#072E40] leading-tight">
+                  {hotel.nombre}
+                </h3>
+                {/* Estrellas */}
+                <div className="flex items-center gap-1 mt-1">
+                  {Array.from({ length: estrellas }).map((_, i) => (
+                    <span key={i} className="text-yellow-400 text-sm">★</span>
                   ))}
                 </div>
-              )}
-
-              {/* Room type + all inclusive badge */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                <span className="text-xs font-semibold text-gray-800 bg-gray-100/80 border border-gray-200 px-3 py-1.5 rounded-full">
-                  Habitaci&oacute;n {oferta.base || 'doble'}
-                </span>
-                {isAllInclusive && (
-                  <span className="flex items-center gap-1 text-xs font-bold text-[#0ea5a0] bg-[#11BCB3]/15 border border-[#11BCB3]/40 px-3 py-1.5 rounded-full">
-                    <IconCheck /> TODO INCLUIDO
-                  </span>
-                )}
-              </div>
-
-              <p className="text-sm text-gray-500 mt-4">
-                Este hotel ya est&aacute; incluido en tu paquete ✨
-              </p>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-200 flex items-center gap-4">
-              <div className="flex-1 max-w-[260px]">
-                <p className="text-[11px] text-gray-400 leading-tight">
-                  Precio sujeto a disponibilidad · {oferta.mes}
+                {/* Location */}
+                <p className="flex items-center gap-1 text-sm text-gray-400 mt-1">
+                  <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/>
+                  </svg>
+                  {oferta.destino}
                 </p>
               </div>
-              <div className="flex items-center gap-3 ml-auto">
-                <a
-                  href={waUrl}
-                  target="_blank"
-                  className="flex items-center gap-2 bg-[#11BCB3] hover:bg-[#0ea5a0] text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98] text-sm whitespace-nowrap"
-                >
-                  Ver disponibilidad por WhatsApp
-                </a>
+
+              {/* PRECIO */}
+              <div className="text-right shrink-0">
+                <p className="text-xs text-gray-400 leading-none">Desde</p>
+                <div className="flex items-end gap-1 leading-none mt-0.5">
+                  <span className="text-base font-semibold text-[#072E40]">USD</span>
+                  <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#072E40]">
+                    {hotel.precio.toLocaleString('es-AR')}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400 mt-0.5">Por persona en base doble</p>
               </div>
             </div>
+
+            {/* PILLS */}
+            {incluye.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {incluye.slice(0, 4).map((item, i) => (
+                  <span key={i} className="flex items-center gap-1.5 text-xs font-medium text-[#072E40] bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
+                    <span className="text-[#11BCB3]"><IconCheck /></span>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* FOOTER */}
+            <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between gap-4">
+              <p className="text-[11px] text-gray-400 leading-snug">
+                ⚠️ Precio sujeto a disponibilidad al momento de la reserva
+              </p>
+              <a
+                href={waUrl}
+                target="_blank"
+                className="flex items-center gap-2 bg-[#11BCB3] hover:bg-[#0ea5a0] text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98] text-sm whitespace-nowrap shrink-0"
+              >
+                Ver disponibilidad por WhatsApp
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
