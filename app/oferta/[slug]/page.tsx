@@ -459,29 +459,29 @@ function HotelPrincipal({ hotel, oferta, waUrl }: { hotel: Hotel; oferta: Oferta
 
             {/* TOP: nombre + precio */}
             <div className="flex items-start justify-between gap-4">
+
+              {/* NOMBRE / LOCATION / ESTRELLAS */}
               <div>
                 <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-[#072E40] leading-tight">
                   {hotel.nombre}
                 </h3>
-                {/* Estrellas */}
-                <div className="flex items-center gap-1 mt-1">
-                  {Array.from({ length: estrellas }).map((_, i) => (
-                    <span key={i} className="text-yellow-400 text-sm">★</span>
-                  ))}
-                </div>
-                {/* Location */}
                 <p className="flex items-center gap-1 text-sm text-gray-400 mt-1">
                   <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/>
                   </svg>
                   {oferta.destino}
                 </p>
+                <div className="flex items-center gap-0.5 mt-1.5">
+                  {Array.from({ length: estrellas }).map((_, i) => (
+                    <span key={i} className="text-yellow-400 text-sm">★</span>
+                  ))}
+                </div>
               </div>
 
-              {/* PRECIO */}
+              {/* PRECIO — todo alineado derecha */}
               <div className="text-right shrink-0">
                 <p className="text-xs text-gray-400 leading-none">Desde</p>
-                <div className="flex items-end gap-1 leading-none mt-0.5">
+                <div className="flex items-end justify-end gap-1 leading-none mt-0.5">
                   <span className="text-base font-semibold text-[#072E40]">USD</span>
                   <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#072E40]">
                     {hotel.precio.toLocaleString('es-AR')}
@@ -489,6 +489,7 @@ function HotelPrincipal({ hotel, oferta, waUrl }: { hotel: Hotel; oferta: Oferta
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">Por persona en base doble</p>
               </div>
+
             </div>
 
             {/* PILLS */}
