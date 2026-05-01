@@ -34,13 +34,14 @@ type FormState = {
   precio_base: string
   descripcion_corta: string
   fecha_salida: string
+  expires_at: string
   incluye: string[]
   features: Feature[]
 }
 
 const EMPTY_FORM: FormState = {
   destino: '', origen: '', mes: '', precio_base: '',
-  descripcion_corta: '', fecha_salida: '', incluye: [], features: [],
+  descripcion_corta: '', fecha_salida: '', expires_at: '', incluye: [], features: [],
 }
 
 const ICON_OPTIONS = ['plane', 'car', 'hotel', 'shield', 'check'] as const
@@ -374,6 +375,7 @@ export function OfertaBuilder({ editingId, initialForm, initialHoteles, initialI
       ...base,
       descripcion_corta: form.descripcion_corta || null,
       fecha_salida: form.fecha_salida || null,
+      expires_at: form.expires_at || null,
       incluye: form.incluye.length > 0 ? form.incluye : null,
       features: form.features.length > 0
         ? form.features.map(({ icon, title, subtitle }) => ({ icon, title, subtitle: subtitle || undefined }))
@@ -480,15 +482,27 @@ export function OfertaBuilder({ editingId, initialForm, initialHoteles, initialI
               <p className="text-xs text-gray-400 mt-1 text-right">{form.descripcion_corta.length}/160</p>
             </div>
 
-            {/* fecha_salida */}
-            <div>
-              <label className={labelCls}>Fecha de salida</label>
-              <input
-                className={inputCls}
-                placeholder="Ej: 16 Oct 2026"
-                value={form.fecha_salida}
-                onChange={e => setForm({ ...form, fecha_salida: e.target.value })}
-              />
+            {/* fecha_salida + expires_at */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>Fecha de salida</label>
+                <input
+                  className={inputCls}
+                  placeholder="Ej: 16 Oct 2026"
+                  value={form.fecha_salida}
+                  onChange={e => setForm({ ...form, fecha_salida: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>Válido hasta</label>
+                <input
+                  className={inputCls}
+                  type="date"
+                  value={form.expires_at}
+                  onChange={e => setForm({ ...form, expires_at: e.target.value })}
+                />
+                <p className="text-[11px] text-gray-400 mt-1">La oferta se oculta automáticamente después de esta fecha.</p>
+              </div>
             </div>
 
             {/* incluye chips */}

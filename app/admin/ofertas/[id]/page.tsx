@@ -44,6 +44,7 @@ export default async function EditarOfertaPage({ params }: any) {
         precio_base: String(oferta.precio_base),
         descripcion_corta: oferta.descripcion_corta ?? '',
         fecha_salida: oferta.fecha_salida ?? '',
+        expires_at: oferta.expires_at ? new Date(oferta.expires_at).toISOString().split('T')[0] : '',
         incluye: Array.isArray(oferta.incluye) ? oferta.incluye : [],
         features: Array.isArray(oferta.features)
           ? oferta.features.map((f: { icon: string; title: string; subtitle?: string }) => ({

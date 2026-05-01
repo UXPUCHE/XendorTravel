@@ -272,6 +272,9 @@ function HeroOferta({ oferta, heroBg, waUrl }: { oferta: Oferta; heroBg: string;
               Consultar disponibilidad
               <IconWhatsApp />
             </a>
+            <p className="text-center text-[11px] text-gray-400 mt-2 leading-snug">
+              Precio sujeto a disponibilidad al momento de la reserva.
+            </p>
           </div>
         </div>
       </div>
@@ -609,6 +612,35 @@ function HotelCard({ hotel, waUrl }: { hotel: Hotel; waUrl: string }) {
 
 // ---- CTA ----
 
+function FamilyPlanBlock({ waUrl }: { waUrl: string }) {
+  return (
+    <section className="bg-[#F0FBF9] border-y border-[#11BCB3]/20">
+      <div className="max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-[#11BCB3]/15 flex items-center justify-center shrink-0 text-2xl">
+            👨‍👩‍👧‍👦
+          </div>
+          <div>
+            <p className="text-[#072E40] font-bold text-lg leading-tight">
+              Family Plan disponible
+            </p>
+            <p className="text-gray-500 text-sm mt-0.5">
+              Consultá tarifas especiales para 2 adultos + 2 menores de 12 años
+            </p>
+          </div>
+        </div>
+        <a
+          href={waUrl}
+          target="_blank"
+          className="shrink-0 flex items-center gap-2 bg-[#11BCB3] hover:bg-[#0ea5a0] text-white font-bold px-7 py-3.5 rounded-xl shadow-md transition text-sm whitespace-nowrap"
+        >
+          Consultar ahora
+        </a>
+      </div>
+    </section>
+  )
+}
+
 function CTAFinal({ waUrlGeneral }: { waUrlGeneral: string }) {
   return (
     <section className="bg-[#072E40]">
@@ -652,6 +684,22 @@ export default async function OfertaPage({ params }: any) {
     .single()
 
   if (!oferta) return <div className="p-8 text-gray-500">Oferta no encontrada</div>
+
+  const expirada = oferta.expires_at && new Date(oferta.expires_at) < new Date()
+  if (expirada) return (
+    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+      <p className="text-5xl mb-4">✈️</p>
+      <h1 className="text-2xl font-bold text-[#072E40] mb-2">Esta oferta ya no está disponible</h1>
+      <p className="text-gray-500 mb-6">El paquete venció o fue dado de baja. Consultanos por nuevas fechas.</p>
+      <a
+        href={`https://wa.me/5493516678823?text=${encodeURIComponent('Hola! Consulto por disponibilidad de nuevas fechas para el paquete a ' + oferta.destino)}`}
+        target="_blank"
+        className="flex items-center gap-2 bg-[#11BCB3] text-white font-bold px-6 py-3 rounded-xl text-sm"
+      >
+        Consultar nuevas fechas por WhatsApp
+      </a>
+    </div>
+  )
 
   const [{ data: hoteles }, { data: vuelos }] = await Promise.all([
     supabase
@@ -704,6 +752,7 @@ export default async function OfertaPage({ params }: any) {
           })()}
         </>
       )}
+      <FamilyPlanBlock waUrl={waLink(`Hola! Quiero consultar tarifas Family Plan para el paquete a ${oferta.destino} en ${oferta.mes} (2 adultos + 2 menores). Me pasás info?`)} />
       <CTAFinal waUrlGeneral={waUrlGeneral} />
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-3 md:hidden z-50">
         <a
