@@ -1,23 +1,36 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { LayoutDashboard, PlusCircle, Pencil, Wrench, Settings, LogOut, Mail, Bell } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { LayoutDashboard, PlusCircle, Pencil, Wrench, Settings, LogOut, Bell } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { useEffect, useState } from 'react'
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Crear oferta', href: '/admin/ofertas', icon: PlusCircle },
+  { label: 'Crear oferta', href: '/admin/ofertas/nueva', icon: PlusCircle },
   { label: 'Editar ofertas', href: '/admin/ofertas', icon: Pencil },
   { label: 'Herramientas', href: '#', icon: Wrench },
 ]
 
-const bottomItems = [
-  { label: 'Configuración', href: '#', icon: Settings },
-  { label: 'Logout', href: '#', icon: LogOut },
-]
-
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const [userInitial, setUserInitial] = useState('?')
+  const [userEmail, setUserEmail] = useState('')
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const email = data.user?.email || ''
+      setUserEmail(email)
+      setUserInitial(email.charAt(0).toUpperCase())
+    })
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -41,18 +54,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             })}
           </nav>
         </div>
-        <div className="px-3 pb-6 space-y-1">
-          <div className="border-t border-white/10 mb-4" />
-          {bottomItems.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={label}
-              href={href}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-white/10 transition"
-            >
-              <Icon size={16} />
-              {label}
-            </Link>
-          ))}
+
+        {/* BOTTOM */}
+        <div className="px-3 pb-4">
+          <div className="border-t border-white/10 mb-3" />
+
+          {/* Configuración */}
+          <Link
+            href="/admin/configuracion"
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition w-full ${pathname === '/admin/configuracion' ? 'bg-white/10 font-semibold' : 'hover:bg-white/10'}`}
+          >
+            <Settings size={16} />
+            Configuración
+          </Link>
+
+          {/* User + logout */}
+          <div className="mt-2 flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 transition">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-7 h-7 rounded-full bg-[#11BCB3] flex items-center justify-center text-xs font-bold shrink-0">
+                {userInitial}
+              </div>
+              <span className="text-xs text-white/70 truncate">{userEmail}</span>
+            </div>
+            <button onClick={handleLogout} title="Cerrar sesión" className="text-white/50 hover:text-white transition shrink-0 ml-2">
+              <LogOut size={15} />
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -64,9 +91,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="bg-gray-100 rounded-full px-4 py-2 text-sm w-72 focus:outline-none"
           />
           <div className="flex items-center gap-4">
-            <button className="text-gray-500 hover:text-gray-700"><Mail size={18} /></button>
             <button className="text-gray-500 hover:text-gray-700"><Bell size={18} /></button>
-            <div className="w-8 h-8 rounded-full bg-[#072E40] text-white flex items-center justify-center text-sm font-semibold">N</div>
+            <div className="w-8 h-8 rounded-full bg-[#072E40] text-white flex items-center justify-center text-sm font-semibold">
+              {userInitial}
+            </div>
           </div>
         </header>
 
