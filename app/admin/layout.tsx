@@ -17,13 +17,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const router = useRouter()
   const [userInitial, setUserInitial] = useState('?')
-  const [userEmail, setUserEmail] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userAvatar, setUserAvatar] = useState('')
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      const email = data.user?.email || ''
-      setUserEmail(email)
-      setUserInitial(email.charAt(0).toUpperCase())
+      const meta = data.user?.user_metadata || {}
+      const name = meta.name || data.user?.email?.split('@')[0] || ''
+      setUserName(name)
+      setUserInitial(name.charAt(0).toUpperCase())
+      setUserAvatar(meta.avatar_url || '')
     })
   }, [])
 
@@ -71,10 +74,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* User + logout */}
           <div className="mt-2 flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 transition">
             <div className="flex items-center gap-2 min-w-0">
-              <div className="w-7 h-7 rounded-full bg-[#11BCB3] flex items-center justify-center text-xs font-bold shrink-0">
-                {userInitial}
-              </div>
-              <span className="text-xs text-white/70 truncate">{userEmail}</span>
+              {userAvatar ? (
+                <img src={userAvatar} className="w-7 h-7 rounded-full object-cover shrink-0" alt="Avatar" />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-[#11BCB3] flex items-center justify-center text-xs font-bold shrink-0">
+                  {userInitial}
+                </div>
+              )}
+              <span className="text-xs text-white/70 truncate">{userName}</span>
             </div>
             <button onClick={handleLogout} title="Cerrar sesión" className="text-white/50 hover:text-white transition shrink-0 ml-2">
               <LogOut size={15} />
@@ -92,9 +99,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           />
           <div className="flex items-center gap-4">
             <button className="text-gray-500 hover:text-gray-700"><Bell size={18} /></button>
-            <div className="w-8 h-8 rounded-full bg-[#072E40] text-white flex items-center justify-center text-sm font-semibold">
-              {userInitial}
-            </div>
+            {userAvatar ? (
+              <img src={userAvatar} className="w-8 h-8 rounded-full object-cover" alt="Avatar" />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[#072E40] text-white flex items-center justify-center text-sm font-semibold">
+                {userInitial}
+              </div>
+            )}
           </div>
         </header>
 
