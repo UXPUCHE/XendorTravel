@@ -1,4 +1,15 @@
-export default function HotelCard({ hotel, waUrl }) {
+type Hotel = {
+  id: string
+  nombre: string
+  precio: number
+  badge?: string
+  imagen?: string
+  estrellas?: number
+  regimen?: string
+  noches?: number
+}
+
+export default function HotelCard({ hotel, waUrl }: { hotel: Hotel; waUrl: string }) {
   return (
     <div className="shrink-0 w-64 snap-start bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
       
