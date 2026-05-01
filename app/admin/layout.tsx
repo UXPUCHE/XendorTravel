@@ -39,7 +39,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex min-h-screen">
       <aside className="w-64 bg-[#072E40] text-white flex flex-col shrink-0 h-screen sticky top-0">
         <div className="flex-1 overflow-y-auto">
-          <div className="px-6 py-6 text-2xl font-bold tracking-tight">Xendor</div>
+          <div className="px-6 py-5">
+            <img src="/xendortravel.svg" alt="Xendor Travel" className="h-8 w-auto" />
+          </div>
           <div className="border-t border-white/10 mt-2 mb-4" />
           <nav className="px-3 space-y-1">
             {navItems.map(({ label, href, icon: Icon }) => {

@@ -25,6 +25,8 @@ type Oferta = {
   features?: Feature[]
   fecha_salida?: string
   descripcion_corta?: string
+  imagen_hero?: string
+  cuotas?: string
 }
 
 type Hotel = {
@@ -228,18 +230,13 @@ function HeroOferta({ oferta, heroBg, waUrl }: { oferta: Oferta; heroBg: string;
               </p>
             </div>
 
-            {/* Cuotas dinámicas */}
-            {(() => {
-              const cuotaFeature = oferta.features?.find(f =>
-                f.title.toLowerCase().includes('cuota')
-              )
-              return cuotaFeature ? (
-                <div className="flex items-center gap-2 text-[#11BCB3] font-semibold text-md mb-4">
-                  <IconCheckCircle />
-                  {cuotaFeature.title}
-                </div>
-              ) : null
-            })()}
+            {/* Cuotas */}
+            {(oferta.cuotas || oferta.features?.find(f => f.title.toLowerCase().includes('cuota'))) && (
+              <div className="flex items-center gap-2 text-[#11BCB3] font-semibold text-md mb-4">
+                <IconCheckCircle />
+                {oferta.cuotas || oferta.features?.find(f => f.title.toLowerCase().includes('cuota'))?.title}
+              </div>
+            )}
 
             <div className="border-t border-gray-200 my-6"></div>
 
@@ -709,7 +706,7 @@ export default async function OfertaPage({ params }: any) {
   const lista: Hotel[] = hoteles ?? []
   const principal = lista.find(h => h.principal) ?? lista[0]
   const resto = lista.filter(h => h.id !== principal?.id)
-  const heroBg = principal?.imagen || PLACEHOLDER
+  const heroBg = oferta.imagen_hero || principal?.imagen || PLACEHOLDER
 
   console.log('HOTEL DEBUG -> lista:', lista)
   console.log('HOTEL DEBUG -> principal:', principal)

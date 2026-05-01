@@ -36,13 +36,16 @@ type FormState = {
   descripcion_corta: string
   fecha_salida: string
   expires_at: string
+  imagen_hero: string
+  cuotas: string
   incluye: string[]
   features: Feature[]
 }
 
 const EMPTY_FORM: FormState = {
   destino: '', origen: '', mes: '', precio_base: '',
-  descripcion_corta: '', fecha_salida: '', expires_at: '', incluye: [], features: [],
+  descripcion_corta: '', fecha_salida: '', expires_at: '',
+  imagen_hero: '', cuotas: '', incluye: [], features: [],
 }
 
 const ICON_OPTIONS = ['plane', 'car', 'hotel', 'shield', 'check'] as const
@@ -377,6 +380,8 @@ export function OfertaBuilder({ editingId, initialForm, initialHoteles, initialI
       descripcion_corta: form.descripcion_corta || null,
       fecha_salida: form.fecha_salida || null,
       expires_at: form.expires_at || null,
+      imagen_hero: form.imagen_hero || null,
+      cuotas: form.cuotas || null,
       incluye: form.incluye.length > 0 ? form.incluye : null,
       features: form.features.length > 0
         ? form.features.map(({ icon, title, subtitle }) => ({ icon, title, subtitle: subtitle || undefined }))
@@ -468,6 +473,27 @@ export function OfertaBuilder({ editingId, initialForm, initialHoteles, initialI
         <div className="bg-white rounded-xl shadow-md p-8">
           <h2 className="text-lg font-semibold mb-5">Hero de la oferta</h2>
           <div className="flex flex-col gap-5">
+
+            {/* imagen hero */}
+            <div>
+              <label className={labelCls}>Imagen de fondo del hero</label>
+              <ImageInput
+                value={form.imagen_hero}
+                onChange={url => setForm({ ...form, imagen_hero: url })}
+              />
+            </div>
+
+            {/* cuotas */}
+            <div>
+              <label className={labelCls}>Cuotas sin interés</label>
+              <input
+                className={inputCls}
+                placeholder="Ej: 6 cuotas sin interés"
+                value={form.cuotas}
+                onChange={e => setForm({ ...form, cuotas: e.target.value })}
+              />
+              <p className="text-[11px] text-gray-400 mt-1">Aparece destacado en verde en el hero. Dejalo vacío si no aplica.</p>
+            </div>
 
             {/* descripcion_corta */}
             <div>

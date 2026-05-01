@@ -80,7 +80,7 @@ export default function AdminOfertasPage() {
               <th className="pb-3 pr-4 font-medium">Mes</th>
               <th className="pb-3 pr-4 font-medium">Precio</th>
               <th className="pb-3 pr-4 font-medium">Estado</th>
-              <th className="pb-3 font-medium">Acciones</th>
+              <th className="pb-3 font-medium text-right">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -95,7 +95,7 @@ export default function AdminOfertasPage() {
                   </span>
                 </td>
                 <td className="py-4">
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 items-center justify-end">
                     <button type="button" className={btnGhost} onClick={() => toggleActivo(oferta)}>
                       {oferta.activo ? 'Desactivar' : 'Activar'}
                     </button>
